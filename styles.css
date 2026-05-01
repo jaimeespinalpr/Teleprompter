@@ -211,6 +211,7 @@ body {
     align-items: center;
     z-index: 1100;
     pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
 .brand-left,
@@ -277,6 +278,7 @@ body {
     border-radius: 12px;
     flex-wrap: wrap;
     justify-content: center;
+    transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
 .scroll-controls {
@@ -290,6 +292,7 @@ body {
     background: rgba(0,0,0,0.8);
     padding: 15px;
     border-radius: 12px;
+    transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
 .scroll-controls #currentSpeed {
@@ -352,6 +355,21 @@ body.light-mode .setting input[type="text"] {
 
 body.light-mode .import-status {
     color: #3559a8;
+}
+
+#teleprompterMode.controls-hidden .teleprompter-branding,
+#teleprompterMode.controls-hidden .teleprompter-controls,
+#teleprompterMode.controls-hidden .scroll-controls {
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+}
+
+#teleprompterMode:not(.controls-hidden) .teleprompter-branding,
+#teleprompterMode:not(.controls-hidden) .teleprompter-controls,
+#teleprompterMode:not(.controls-hidden) .scroll-controls {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 @media (max-width: 768px) {

@@ -12,6 +12,8 @@ class TeleprompterApp {
         this.scrollPosition = 0;
         this.animationFrame = null;
         this.touchPaused = false;
+        this.controlsVisible = false;
+        this.controlsHideTimer = null;
         this.speakerName = '';
         this.logoDataUrl = '';
 
@@ -24,6 +26,9 @@ class TeleprompterApp {
             teleprompterMode: document.getElementById('teleprompterMode'),
             teleprompterContainer: document.querySelector('#teleprompterMode .teleprompter-container'),
             teleprompterText: document.getElementById('teleprompterText'),
+            teleprompterBranding: document.querySelector('#teleprompterMode .teleprompter-branding'),
+            teleprompterControls: document.querySelector('#teleprompterMode .teleprompter-controls'),
+            scrollControls: document.querySelector('#teleprompterMode .scroll-controls'),
             fontSize: document.getElementById('fontSize'),
             fontSizeValue: document.getElementById('fontSizeValue'),
             scrollSpeed: document.getElementById('scrollSpeed'),
@@ -86,7 +91,7 @@ class TeleprompterApp {
         this.elements.btnSlower.addEventListener('click', () => this.adjustSpeed(-1));
         this.elements.btnFaster.addEventListener('click', () => this.adjustSpeed(1));
 
-        this.elements.teleprompterContainer.addEventListener('pointerdown', (e) => this.handleTeleprompterHoldStart(e));
+        this.elements.teleprompterContainer.addEventListener('pointerdown', (e) => this.handleTeleprompterTouch(e));
         this.elements.teleprompterContainer.addEventListener('pointerup', () => this.handleTeleprompterHoldEnd());
         this.elements.teleprompterContainer.addEventListener('pointercancel', () => this.handleTeleprompterHoldEnd());
         this.elements.teleprompterContainer.addEventListener('pointerleave', () => this.handleTeleprompterHoldEnd());
@@ -292,6 +297,7 @@ class TeleprompterApp {
             this.elements.editorMode.classList.remove('active');
             this.elements.teleprompterMode.classList.add('active');
             this.elements.teleprompterContainer.classList.add('active');
+            this.elements.teleprompterMode.classList.add('controls-hidden');
             this.elements.toggleMode.textContent = '✏️ Editar Script';
             this.applyTeleprompterContent();
             this.toggleDarkMode(this.darkMode);
@@ -313,6 +319,7 @@ class TeleprompterApp {
         this.elements.btnPause.disabled = false;
         this.elements.btnPause.textContent = '⏸️ Pausar';
         this.elements.teleprompterContainer.classList.add('active');
+        this.hideTeleprompterControls(true);
         this.requestFullscreenIfMobile();
         this.scroll();
     }
@@ -345,23 +352,50 @@ class TeleprompterApp {
         }
     }
 
-    handleTeleprompterHoldStart(event) {
-        if (!this.isRunning || this.isPaused || this.touchPaused) return;
-        if (event.target.closest('button')) return;
-        this.touchPaused = true;
-        this.isPaused = true;
-        this.elements.btnPause.textContent = '▶️ Reanudar';
+    handleTeleprompterTouch(event) {
+        if (!this.isRunning) return;
+        const tappedControl = event.target.closest('.teleprompter-controls, .scroll-controls, .teleprompter-branding, button, input');
+        if (tappedControl) {
+            this.showTeleprompterControls();
+            return;
+        }
+        this.showTeleprompterControls();
         if (event.pointerId !== undefined && event.currentTarget?.setPointerCapture) {
             try { event.currentTarget.setPointerCapture(event.pointerId); } catch (_) {}
         }
     }
 
     handleTeleprompterHoldEnd() {
-        if (!this.touchPaused) return;
-        this.touchPaused = false;
-        this.isPaused = false;
-        this.elements.btnPause.textContent = '⏸️ Pausar';
-        this.scroll();
+        if (!this.controlsVisible) return;
+        this.scheduleHideControls();
+    }
+
+    showTeleprompterControls() {
+        if (!this.elements.teleprompterMode.classList.contains('active')) return;
+        this.controlsVisible = true;
+        this.elements.teleprompterMode.classList.remove('controls-hidden');
+        this.scheduleHideControls();
+    }
+
+    hideTeleprompterControls(immediate = false) {
+        clearTimeout(this.controlsHideTimer);
+        this.controlsVisible = false;
+        if (immediate) {
+            this.elements.teleprompterMode.classList.add('controls-hidden');
+            return;
+        }
+        this.controlsHideTimer = setTimeout(() => {
+            this.elements.teleprompterMode.classList.add('controls-hidden');
+            this.controlsVisible = false;
+        }, 3000);
+    }
+
+    scheduleHideControls() {
+        clearTimeout(this.controlsHideTimer);
+        this.controlsHideTimer = setTimeout(() => {
+            this.elements.teleprompterMode.classList.add('controls-hidden');
+            this.controlsVisible = false;
+        }, 3000);
     }
 
     requestFullscreenIfMobile() {
@@ -383,6 +417,8 @@ class TeleprompterApp {
         this.isPaused = false;
         this.touchPaused = false;
         this.elements.teleprompterText.style.transform = '';
+        this.elements.teleprompterMode.classList.remove('controls-hidden');
+        clearTimeout(this.controlsHideTimer);
         if (document.fullscreenElement && document.exitFullscreen) {
             document.exitFullscreen().catch(() => {});
         }
@@ -395,6 +431,7 @@ class TeleprompterApp {
         this.stopTeleprompter();
         this.elements.teleprompterContainer.classList.remove('active');
         this.elements.teleprompterMode.classList.remove('active');
+        this.elements.teleprompterMode.classList.remove('controls-hidden');
         this.elements.editorMode.classList.add('active');
         this.elements.toggleMode.textContent = '🎬 Iniciar Teleprompter';
     }
