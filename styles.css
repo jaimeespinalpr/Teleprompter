@@ -6,8 +6,8 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    background: #1a1a2e;
-    color: #eee;
+    background: radial-gradient(circle at top, #1f2a4a 0%, #0b1020 55%, #05070f 100%);
+    color: #eef2ff;
     min-height: 100vh;
 }
 
@@ -28,7 +28,7 @@ body {
 
 .header h1 {
     font-size: 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #8ab4ff 0%, #c084fc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -74,22 +74,25 @@ body {
 
 .editor-container,
 .settings-panel {
-    background: #16213e;
-    border-radius: 12px;
+    background: rgba(16, 24, 45, 0.82);
+    border: 1px solid rgba(138, 180, 255, 0.16);
+    box-shadow: 0 16px 50px rgba(0,0,0,0.28);
+    border-radius: 16px;
     padding: 20px;
     margin-bottom: 20px;
+    backdrop-filter: blur(10px);
 }
 
 #scriptInput {
     width: 100%;
     min-height: 400px;
-    background: #0f3460;
-    border: 2px solid #333;
-    border-radius: 8px;
+    background: linear-gradient(180deg, #102547 0%, #0b1630 100%);
+    border: 1px solid rgba(138, 180, 255, 0.22);
+    border-radius: 12px;
     padding: 20px;
     font-size: 16px;
     line-height: 1.6;
-    color: #eee;
+    color: #f8fbff;
     resize: vertical;
 }
 
@@ -181,7 +184,7 @@ body {
     width: 100%;
     height: 100vh;
     height: 100dvh;
-    background: #000;
+    background: radial-gradient(circle at top, #111827 0%, #050814 70%, #000 100%);
     z-index: 1000;
     overflow: hidden;
     display: none;
@@ -208,16 +211,19 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(0,0,0,0.35);
+    background: rgba(10, 14, 26, 0.48);
+    border: 1px solid rgba(255,255,255,0.10);
     padding: 10px 14px;
     border-radius: 999px;
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
 }
 
 .brand-right {
     color: #fff;
     font-size: 1rem;
     font-weight: 700;
+    letter-spacing: 0.02em;
 }
 
 .logo-preview {
@@ -229,7 +235,7 @@ body {
 }
 
 .logo-placeholder {
-    color: #bbb;
+    color: #d8e1ff;
     font-weight: 700;
 }
 
@@ -240,7 +246,8 @@ body {
     font-size: 48px;
     line-height: 1.8;
     text-align: center;
-    color: white;
+    color: #f8fbff;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.7);
     will-change: transform;
     user-select: none;
     -webkit-user-select: none;
@@ -309,8 +316,8 @@ body {
 }
 
 body.dark-mode {
-    background: #1a1a2e;
-    color: #eee;
+    background: radial-gradient(circle at top, #1f2a4a 0%, #0b1020 55%, #05070f 100%);
+    color: #eef2ff;
 }
 
 body.light-mode {

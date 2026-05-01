@@ -282,6 +282,7 @@ class TeleprompterApp {
 
             this.elements.editorMode.classList.remove('active');
             this.elements.teleprompterMode.classList.add('active');
+            this.elements.teleprompterContainer.classList.add('active');
             this.elements.toggleMode.textContent = '✏️ Editar Script';
             this.applyTeleprompterContent();
             this.toggleDarkMode(this.darkMode);
@@ -302,6 +303,7 @@ class TeleprompterApp {
         this.elements.btnStart.disabled = true;
         this.elements.btnPause.disabled = false;
         this.elements.btnPause.textContent = '⏸️ Pausar';
+        this.elements.teleprompterContainer.classList.add('active');
         this.requestFullscreenIfMobile();
         this.scroll();
     }
@@ -312,6 +314,8 @@ class TeleprompterApp {
         this.scrollPosition += this.scrollSpeed * 0.5;
         const transform = `translateY(-${this.scrollPosition}px) ${this.mirrorMode ? 'scaleX(-1)' : ''}`;
         this.elements.teleprompterText.style.transform = transform;
+        this.elements.teleprompterText.style.opacity = '1';
+        this.elements.teleprompterText.style.visibility = 'visible';
 
         const maxScroll = Math.max(0, this.elements.teleprompterText.scrollHeight - window.innerHeight + 200);
         if (this.scrollPosition >= maxScroll) {
@@ -369,6 +373,7 @@ class TeleprompterApp {
         this.isRunning = false;
         this.isPaused = false;
         this.touchPaused = false;
+        this.elements.teleprompterText.style.transform = '';
         if (document.fullscreenElement && document.exitFullscreen) {
             document.exitFullscreen().catch(() => {});
         }
@@ -379,6 +384,7 @@ class TeleprompterApp {
 
     exitTeleprompter() {
         this.stopTeleprompter();
+        this.elements.teleprompterContainer.classList.remove('active');
         this.elements.teleprompterMode.classList.remove('active');
         this.elements.editorMode.classList.add('active');
         this.elements.toggleMode.textContent = '🎬 Iniciar Teleprompter';
