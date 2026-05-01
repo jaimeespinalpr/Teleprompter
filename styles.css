@@ -410,10 +410,42 @@ body.light-mode .import-status {
         bottom: 10px;
         left: 50%;
         width: calc(100% - 20px);
+        padding: 10px;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .teleprompter-controls .btn {
+        flex: 1 1 calc(50% - 8px);
+        min-width: 110px;
     }
 
     .scroll-controls {
-        bottom: 80px;
-        right: 10px;
+        bottom: 86px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: calc(100% - 20px);
+        padding: 10px;
+    }
+
+    .scroll-controls .btn-sm {
+        flex: 0 0 auto;
+    }
+}
+
+@media (max-width: 420px) {
+    .teleprompter-controls .btn {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    .scroll-controls {
+        bottom: 148px;
+        width: calc(100% - 20px);
+        gap: 8px;
     }
 }
