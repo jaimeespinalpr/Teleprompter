@@ -11,6 +11,7 @@ class TeleprompterApp {
         this.darkMode = true;
         this.scrollPosition = 0;
         this.animationFrame = null;
+        this.touchPaused = false;
         this.speakerName = '';
         this.logoDataUrl = '';
 
@@ -21,6 +22,7 @@ class TeleprompterApp {
             toggleMode: document.getElementById('toggleMode'),
             editorMode: document.getElementById('editorMode'),
             teleprompterMode: document.getElementById('teleprompterMode'),
+            teleprompterContainer: document.querySelector('#teleprompterMode .teleprompter-container'),
             teleprompterText: document.getElementById('teleprompterText'),
             fontSize: document.getElementById('fontSize'),
             fontSizeValue: document.getElementById('fontSizeValue'),
@@ -82,6 +84,11 @@ class TeleprompterApp {
         this.elements.btnExit.addEventListener('click', () => this.exitTeleprompter());
         this.elements.btnSlower.addEventListener('click', () => this.adjustSpeed(-1));
         this.elements.btnFaster.addEventListener('click', () => this.adjustSpeed(1));
+
+        this.elements.teleprompterContainer.addEventListener('pointerdown', (e) => this.handleTeleprompterHoldStart(e));
+        this.elements.teleprompterContainer.addEventListener('pointerup', () => this.handleTeleprompterHoldEnd());
+        this.elements.teleprompterContainer.addEventListener('pointercancel', () => this.handleTeleprompterHoldEnd());
+        this.elements.teleprompterContainer.addEventListener('pointerleave', () => this.handleTeleprompterHoldEnd());
 
         document.addEventListener('keydown', (e) => this.handleKeyboard(e));
     }
@@ -290,10 +297,12 @@ class TeleprompterApp {
         await this.showCountdown(3);
         this.isRunning = true;
         this.isPaused = false;
+        this.touchPaused = false;
         this.scrollPosition = 0;
         this.elements.btnStart.disabled = true;
         this.elements.btnPause.disabled = false;
         this.elements.btnPause.textContent = '⏸️ Pausar';
+        this.requestFullscreenIfMobile();
         this.scroll();
     }
 
@@ -323,6 +332,33 @@ class TeleprompterApp {
         }
     }
 
+    handleTeleprompterHoldStart(event) {
+        if (!this.isRunning || this.isPaused || this.touchPaused) return;
+        if (event.target.closest('button')) return;
+        this.touchPaused = true;
+        this.isPaused = true;
+        this.elements.btnPause.textContent = '▶️ Reanudar';
+        if (event.pointerId !== undefined && event.currentTarget?.setPointerCapture) {
+            try { event.currentTarget.setPointerCapture(event.pointerId); } catch (_) {}
+        }
+    }
+
+    handleTeleprompterHoldEnd() {
+        if (!this.touchPaused) return;
+        this.touchPaused = false;
+        this.isPaused = false;
+        this.elements.btnPause.textContent = '⏸️ Pausar';
+        this.scroll();
+    }
+
+    requestFullscreenIfMobile() {
+        const isMobile = window.matchMedia('(max-width: 768px)').matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const target = this.elements.teleprompterMode;
+        if (!isMobile || !target.requestFullscreen) return;
+        if (document.fullscreenElement) return;
+        target.requestFullscreen().catch(() => {});
+    }
+
     restartTeleprompter() {
         this.scrollPosition = 0;
         this.elements.teleprompterText.style.transform = `translateY(0) ${this.mirrorMode ? 'scaleX(-1)' : ''}`;
@@ -332,6 +368,10 @@ class TeleprompterApp {
     stopTeleprompter() {
         this.isRunning = false;
         this.isPaused = false;
+        this.touchPaused = false;
+        if (document.fullscreenElement && document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+        }
         if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
         this.elements.btnStart.disabled = false;
         this.elements.btnPause.disabled = true;

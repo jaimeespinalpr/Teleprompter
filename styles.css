@@ -178,10 +178,15 @@ body {
 .teleprompter-container {
     position: fixed;
     inset: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
     background: #000;
     z-index: 1000;
     overflow: hidden;
     display: none;
+    touch-action: none;
+    overscroll-behavior: none;
 }
 
 .teleprompter-container.active { display: block; }
@@ -237,6 +242,8 @@ body {
     text-align: center;
     color: white;
     will-change: transform;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .teleprompter-text.mirror {
@@ -354,8 +361,19 @@ body.light-mode .setting input[type="text"] {
         height: 40px;
     }
 
+    .teleprompter-text {
+        padding-left: 6%;
+        padding-right: 6%;
+        padding-top: 42vh;
+        padding-bottom: 42vh;
+        font-size: 42px;
+        line-height: 1.6;
+    }
+
     .teleprompter-controls {
         bottom: 10px;
+        left: 50%;
+        width: calc(100% - 20px);
     }
 
     .scroll-controls {
