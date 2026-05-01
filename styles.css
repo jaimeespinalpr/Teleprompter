@@ -1,0 +1,327 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #1a1a2e;
+    color: #eee;
+    min-height: 100vh;
+}
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 2px solid #333;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    color: #1a1a2e;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+/* Modes */
+.mode {
+    display: none;
+}
+
+.mode.active {
+    display: block;
+}
+
+/* Editor */
+.editor-container {
+    background: #16213e;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#scriptInput {
+    width: 100%;
+    min-height: 400px;
+    background: #0f3460;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #eee;
+    resize: vertical;
+}
+
+#scriptInput:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.editor-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Settings Panel */
+.settings-panel {
+    background: #16213e;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.settings-panel h3 {
+    margin-bottom: 20px;
+    color: #667eea;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.setting {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.setting label {
+    font-weight: 600;
+    color: #ccc;
+}
+
+.setting input[type="range"] {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #0f3460;
+    -webkit-appearance: none;
+}
+
+.setting input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+}
+
+.setting input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Teleprompter Mode */
+.teleprompter-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #000;
+    z-index: 1000;
+    overflow: hidden;
+    display: none;
+}
+
+.teleprompter-container.active {
+    display: block;
+}
+
+.teleprompter-text {
+    padding: 50vh 10% 50vh;
+    font-size: 48px;
+    line-height: 1.8;
+    text-align: center;
+    color: white;
+}
+
+.teleprompter-text.mirror {
+    transform: scaleX(-1);
+}
+
+.teleprompter-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 1001;
+    background: rgba(0,0,0,0.8);
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.scroll-controls {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1001;
+    background: rgba(0,0,0,0.8);
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.scroll-controls #currentSpeed {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* Countdown Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.countdown {
+    font-size: 200px;
+    font-weight: bold;
+    color: #667eea;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background: #1a1a2e;
+    color: #eee;
+}
+
+body.light-mode {
+    background: #f5f5f5;
+    color: #333;
+}
+
+body.light-mode .editor-container,
+body.light-mode .settings-panel {
+    background: white;
+}
+
+body.light-mode #scriptInput {
+    background: #f9f9f9;
+    color: #333;
+    border-color: #ddd;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .teleprompter-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+        bottom: 10px;
+    }
+    
+    .scroll-controls {
+        bottom: 80px;
+        right: 10px;
+    }
+}

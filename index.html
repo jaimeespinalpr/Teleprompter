@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teleprompter Pro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1>📺 Teleprompter Pro</h1>
+            <div class="header-actions">
+                <button id="toggleMode" class="btn btn-primary">🎬 Iniciar Teleprompter</button>
+            </div>
+        </header>
+
+        <!-- Editor Mode -->
+        <div id="editorMode" class="mode active">
+            <div class="editor-container">
+                <textarea id="scriptInput" placeholder="Escribe o pega tu script aquí..."></textarea>
+                <div class="editor-info">
+                    <span id="charCount">0 caracteres</span>
+                    <span id="timeEstimate">~0 min</span>
+                </div>
+            </div>
+            
+            <div class="settings-panel">
+                <h3>⚙️ Configuración</h3>
+                <div class="settings-grid">
+                    <div class="setting">
+                        <label>Tamaño de Fuente</label>
+                        <input type="range" id="fontSize" min="24" max="120" value="48">
+                        <span id="fontSizeValue">48px</span>
+                    </div>
+                    <div class="setting">
+                        <label>Velocidad de Scroll</label>
+                        <input type="range" id="scrollSpeed" min="1" max="10" value="3">
+                        <span id="scrollSpeedValue">3</span>
+                    </div>
+                    <div class="setting">
+                        <label>Márgenes</label>
+                        <input type="range" id="margins" min="0" max="50" value="10">
+                        <span id="marginsValue">10%</span>
+                    </div>
+                    <div class="setting">
+                        <label>
+                            <input type="checkbox" id="mirrorMode">
+                            Modo Espejo
+                        </label>
+                    </div>
+                    <div class="setting">
+                        <label>
+                            <input type="checkbox" id="darkMode" checked>
+                            Modo Oscuro
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teleprompter Mode -->
+        <div id="teleprompterMode" class="mode">
+            <div class="teleprompter-container">
+                <div id="teleprompterText" class="teleprompter-text"></div>
+            </div>
+            
+            <div class="teleprompter-controls">
+                <button id="btnStart" class="btn btn-success">▶️ Iniciar</button>
+                <button id="btnPause" class="btn btn-warning" disabled>⏸️ Pausar</button>
+                <button id="btnRestart" class="btn btn-secondary">🔄 Reiniciar</button>
+                <button id="btnExit" class="btn btn-danger">❌ Salir</button>
+            </div>
+            
+            <div class="scroll-controls">
+                <button id="btnSlower" class="btn btn-sm">🐛 -</button>
+                <span id="currentSpeed">Vel: 3</span>
+                <button id="btnFaster" class="btn btn-sm">🐇 +</button>
+            </div>
+        </div>
+
+        <!-- Countdown Overlay -->
+        <div id="countdownOverlay" class="overlay hidden">
+            <div class="countdown">3</div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
