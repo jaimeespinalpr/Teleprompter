@@ -25,6 +25,7 @@ class TeleprompterApp {
             editorMode: document.getElementById('editorMode'),
             teleprompterMode: document.getElementById('teleprompterMode'),
             teleprompterContainer: document.querySelector('#teleprompterMode .teleprompter-container'),
+            teleprompterMenuToggle: document.getElementById('teleprompterMenuToggle'),
             teleprompterText: document.getElementById('teleprompterText'),
             teleprompterBranding: document.querySelector('#teleprompterMode .teleprompter-branding'),
             teleprompterControls: document.querySelector('#teleprompterMode .teleprompter-controls'),
@@ -90,6 +91,7 @@ class TeleprompterApp {
         this.elements.btnExit.addEventListener('click', () => this.exitTeleprompter());
         this.elements.btnSlower.addEventListener('click', () => this.adjustSpeed(-1));
         this.elements.btnFaster.addEventListener('click', () => this.adjustSpeed(1));
+        this.elements.teleprompterMenuToggle.addEventListener('click', () => this.toggleTeleprompterMenu());
 
         this.elements.teleprompterContainer.addEventListener('pointerdown', (e) => this.handleTeleprompterTouch(e));
         this.elements.teleprompterContainer.addEventListener('touchstart', (e) => this.handleTeleprompterTouch(e), { passive: true });
@@ -374,7 +376,7 @@ class TeleprompterApp {
 
     handleGlobalTeleprompterTap(event) {
         if (!this.elements.teleprompterMode.classList.contains('active')) return;
-        if (event.target.closest('.teleprompter-controls, .scroll-controls, .teleprompter-branding, button, input')) return;
+        if (event.target.closest('.teleprompter-controls, .scroll-controls, .teleprompter-branding, .teleprompter-menu-toggle, button, input')) return;
         this.showTeleprompterControls();
     }
 
@@ -391,6 +393,10 @@ class TeleprompterApp {
             el.style.pointerEvents = visible ? 'auto' : 'none';
             el.style.transform = visible ? 'translateY(0)' : 'translateY(8px)';
         }
+        if (this.elements.teleprompterMenuToggle) {
+            this.elements.teleprompterMenuToggle.setAttribute('aria-expanded', visible ? 'true' : 'false');
+            this.elements.teleprompterMenuToggle.textContent = visible ? '✕ Cerrar' : '☰ Menú';
+        }
     }
 
     showTeleprompterControls() {
@@ -402,6 +408,17 @@ class TeleprompterApp {
             this.elements.teleprompterMode.classList.add('controls-hidden');
             this.setControlsVisibility(false);
         }, 3000);
+    }
+
+    toggleTeleprompterMenu() {
+        if (!this.elements.teleprompterMode.classList.contains('active')) return;
+        if (this.controlsVisible) {
+            clearTimeout(this.controlsHideTimer);
+            this.elements.teleprompterMode.classList.add('controls-hidden');
+            this.setControlsVisibility(false);
+            return;
+        }
+        this.showTeleprompterControls();
     }
 
     hideTeleprompterControls(immediate = false) {

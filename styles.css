@@ -197,6 +197,7 @@ body {
     display: none;
     touch-action: none;
     overscroll-behavior: none;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .teleprompter-container.active { display: block; }
@@ -212,6 +213,25 @@ body {
     z-index: 1100;
     pointer-events: none;
     transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.teleprompter-menu-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 1200;
+    padding: 10px 14px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 999px;
+    background: rgba(10, 14, 26, 0.58);
+    color: #fff;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    transition: opacity 0.22s ease, transform 0.22s ease, background 0.2s ease;
+}
+
+.teleprompter-menu-toggle:hover {
+    transform: translateY(-1px);
 }
 
 .brand-left,
@@ -365,6 +385,12 @@ body.light-mode .import-status {
     pointer-events: none;
 }
 
+#teleprompterMode.controls-hidden .teleprompter-menu-toggle {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
 #teleprompterMode:not(.controls-hidden) .teleprompter-branding,
 #teleprompterMode:not(.controls-hidden) .teleprompter-controls,
 #teleprompterMode:not(.controls-hidden) .scroll-controls {
@@ -381,71 +407,90 @@ body.light-mode .import-status {
 
     .header h1 { font-size: 1.5rem; }
 
+    .teleprompter-menu-toggle {
+        top: 10px;
+        right: 10px;
+        padding: 9px 12px;
+    }
+
     .teleprompter-branding {
         top: 10px;
         left: 10px;
-        right: 10px;
+        right: 68px;
     }
 
     .brand-left,
     .brand-right {
-        padding: 8px 12px;
+        padding: 7px 10px;
+    }
+
+    .brand-right {
+        font-size: 0.88rem;
+        max-width: 44vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .logo-preview {
-        width: 40px;
-        height: 40px;
+        width: 34px;
+        height: 34px;
     }
 
     .teleprompter-text {
-        padding-left: 6%;
-        padding-right: 6%;
-        padding-top: 42vh;
-        padding-bottom: 42vh;
-        font-size: 42px;
-        line-height: 1.6;
+        padding-left: 5.5%;
+        padding-right: 5.5%;
+        padding-top: 39vh;
+        padding-bottom: 39vh;
+        font-size: clamp(28px, 8vw, 42px);
+        line-height: 1.45;
+        letter-spacing: 0.01em;
     }
 
     .teleprompter-controls {
-        bottom: 10px;
-        left: 50%;
-        width: calc(100% - 20px);
+        left: 10px;
+        right: 10px;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        width: auto;
         padding: 10px;
         gap: 8px;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .teleprompter-controls .btn {
-        flex: 1 1 calc(50% - 8px);
-        min-width: 110px;
+        min-width: 0;
+        width: 100%;
+        padding: 11px 10px;
+        font-size: 0.92rem;
     }
 
     .scroll-controls {
-        bottom: 86px;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
+        top: auto;
+        bottom: calc(92px + env(safe-area-inset-bottom));
+        left: 10px;
+        right: 10px;
+        transform: none;
         flex-direction: row;
         align-items: center;
-        justify-content: center;
-        width: calc(100% - 20px);
-        padding: 10px;
+        justify-content: space-between;
+        width: auto;
+        padding: 10px 12px;
+        gap: 10px;
     }
 
-    .scroll-controls .btn-sm {
-        flex: 0 0 auto;
+    .scroll-controls #currentSpeed {
+        flex: 1;
+        text-align: center;
     }
 }
 
 @media (max-width: 420px) {
-    .teleprompter-controls .btn {
-        flex: 1 1 100%;
-        min-width: 0;
+    .teleprompter-controls {
+        grid-template-columns: 1fr;
     }
 
     .scroll-controls {
-        bottom: 148px;
-        width: calc(100% - 20px);
-        gap: 8px;
+        bottom: calc(148px + env(safe-area-inset-bottom));
     }
 }
