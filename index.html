@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
         <header class="header">
             <h1>📺 Teleprompter Pro</h1>
             <div class="header-actions">
@@ -16,7 +15,6 @@
             </div>
         </header>
 
-        <!-- Editor Mode -->
         <div id="editorMode" class="mode active">
             <div class="editor-container">
                 <textarea id="scriptInput" placeholder="Escribe o pega tu script aquí..."></textarea>
@@ -25,7 +23,32 @@
                     <span id="timeEstimate">~0 min</span>
                 </div>
             </div>
-            
+
+            <div class="settings-panel">
+                <h3>📂 Importar y marca</h3>
+                <div class="upload-grid">
+                    <div class="setting upload-item">
+                        <label for="documentUpload">Subir PDF / Word / TXT</label>
+                        <input type="file" id="documentUpload" accept=".pdf,.doc,.docx,.txt">
+                        <small>Se convierte a texto y se pega en el teleprompter.</small>
+                    </div>
+                    <div class="setting upload-item">
+                        <label for="logoUpload">Subir logo</label>
+                        <input type="file" id="logoUpload" accept="image/*">
+                        <small>Se muestra arriba a la izquierda.</small>
+                    </div>
+                    <div class="setting upload-item">
+                        <label for="speakerName">Nombre a mostrar</label>
+                        <input type="text" id="speakerName" placeholder="Tu nombre o marca">
+                        <small>Se muestra arriba a la derecha.</small>
+                    </div>
+                    <div class="setting upload-item upload-actions">
+                        <label>&nbsp;</label>
+                        <button id="clearLogo" class="btn btn-secondary" type="button">🧹 Quitar logo</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="settings-panel">
                 <h3>⚙️ Configuración</h3>
                 <div class="settings-grid">
@@ -60,19 +83,25 @@
             </div>
         </div>
 
-        <!-- Teleprompter Mode -->
         <div id="teleprompterMode" class="mode">
             <div class="teleprompter-container">
+                <div class="teleprompter-branding">
+                    <div class="brand-left">
+                        <img id="logoPreview" class="logo-preview hidden" alt="Logo">
+                        <span id="logoPlaceholder" class="logo-placeholder">Logo</span>
+                    </div>
+                    <div id="speakerNameDisplay" class="brand-right">Tu nombre</div>
+                </div>
                 <div id="teleprompterText" class="teleprompter-text"></div>
             </div>
-            
+
             <div class="teleprompter-controls">
                 <button id="btnStart" class="btn btn-success">▶️ Iniciar</button>
                 <button id="btnPause" class="btn btn-warning" disabled>⏸️ Pausar</button>
                 <button id="btnRestart" class="btn btn-secondary">🔄 Reiniciar</button>
                 <button id="btnExit" class="btn btn-danger">❌ Salir</button>
             </div>
-            
+
             <div class="scroll-controls">
                 <button id="btnSlower" class="btn btn-sm">🐛 -</button>
                 <span id="currentSpeed">Vel: 3</span>
@@ -80,12 +109,13 @@
             </div>
         </div>
 
-        <!-- Countdown Overlay -->
         <div id="countdownOverlay" class="overlay hidden">
             <div class="countdown">3</div>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
