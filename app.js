@@ -98,6 +98,8 @@ class TeleprompterApp {
         this.elements.teleprompterContainer.addEventListener('pointerleave', () => this.handleTeleprompterHoldEnd());
         this.elements.teleprompterContainer.addEventListener('touchend', () => this.handleTeleprompterHoldEnd(), { passive: true });
 
+        document.addEventListener('pointerdown', (e) => this.handleGlobalTeleprompterTap(e), true);
+        document.addEventListener('touchstart', (e) => this.handleGlobalTeleprompterTap(e), true);
         document.addEventListener('keydown', (e) => this.handleKeyboard(e));
     }
 
@@ -299,8 +301,13 @@ class TeleprompterApp {
             this.elements.editorMode.classList.remove('active');
             this.elements.teleprompterMode.classList.add('active');
             this.elements.teleprompterContainer.classList.add('active');
-            this.setControlsVisibility(false);
-            this.elements.teleprompterMode.classList.add('controls-hidden');
+            this.elements.teleprompterMode.classList.remove('controls-hidden');
+            this.setControlsVisibility(true);
+            clearTimeout(this.controlsHideTimer);
+            this.controlsHideTimer = setTimeout(() => {
+                this.elements.teleprompterMode.classList.add('controls-hidden');
+                this.setControlsVisibility(false);
+            }, 3000);
             this.elements.toggleMode.textContent = '✏️ Editar Script';
             this.applyTeleprompterContent();
             this.toggleDarkMode(this.darkMode);
@@ -363,6 +370,12 @@ class TeleprompterApp {
         if (!tappedControl && event.pointerId !== undefined && event.currentTarget?.setPointerCapture) {
             try { event.currentTarget.setPointerCapture(event.pointerId); } catch (_) {}
         }
+    }
+
+    handleGlobalTeleprompterTap(event) {
+        if (!this.elements.teleprompterMode.classList.contains('active')) return;
+        if (event.target.closest('.teleprompter-controls, .scroll-controls, .teleprompter-branding, button, input')) return;
+        this.showTeleprompterControls();
     }
 
     handleTeleprompterHoldEnd() {
