@@ -31,6 +31,7 @@
                         <label for="documentUpload">Subir PDF / Word / TXT</label>
                         <input type="file" id="documentUpload" accept=".pdf,.doc,.docx,.txt">
                         <small>Se convierte a texto y se pega en el teleprompter.</small>
+                        <div id="importStatus" class="import-status">Sin documento cargado</div>
                     </div>
                     <div class="setting upload-item">
                         <label for="logoUpload">Subir logo</label>
@@ -114,8 +115,8 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="vendor/pdf.min.js"></script>
+    <script src="vendor/mammoth.browser.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

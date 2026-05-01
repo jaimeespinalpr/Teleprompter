@@ -46,7 +46,8 @@ class TeleprompterApp {
             btnSlower: document.getElementById('btnSlower'),
             btnFaster: document.getElementById('btnFaster'),
             currentSpeed: document.getElementById('currentSpeed'),
-            countdownOverlay: document.getElementById('countdownOverlay')
+            countdownOverlay: document.getElementById('countdownOverlay'),
+            importStatus: document.getElementById('importStatus')
         };
 
         this.init();
@@ -54,7 +55,7 @@ class TeleprompterApp {
 
     init() {
         if (window.pdfjsLib) {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'vendor/pdf.worker.min.js';
         }
 
         this.bindEvents();
@@ -98,13 +99,17 @@ class TeleprompterApp {
         if (!file) return;
 
         try {
+            this.setImportStatus(`Leyendo ${file.name}...`);
             const rawText = await this.extractTextFromFile(file);
             const formatted = this.formatForTeleprompter(rawText);
+            if (!formatted) throw new Error('El documento no devolvió texto legible');
             this.elements.scriptInput.value = formatted;
             this.updateCharCount();
+            this.setImportStatus(`Listo: ${file.name}`);
             this.elements.scriptInput.focus();
         } catch (error) {
             console.error(error);
+            this.setImportStatus('No pude leer ese documento');
             alert('No pude leer ese documento. Prueba con otro PDF o Word.');
         } finally {
             this.saveToStorage();
@@ -194,6 +199,10 @@ class TeleprompterApp {
         this.logoDataUrl = '';
         this.refreshBranding();
         this.saveToStorage();
+    }
+
+    setImportStatus(text) {
+        if (this.elements.importStatus) this.elements.importStatus.textContent = text;
     }
 
     updateSpeakerName(value) {
@@ -491,6 +500,7 @@ class TeleprompterApp {
                 this.elements.speakerNameInput.value = settings.speakerName;
             }
             if (settings.logoDataUrl) this.logoDataUrl = settings.logoDataUrl;
+            if (settings.logoDataUrl) this.setImportStatus('Logo cargado');
             this.refreshBranding();
             this.updateCharCount();
         } catch (e) {

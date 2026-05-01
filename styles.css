@@ -137,6 +137,13 @@ body {
     line-height: 1.4;
 }
 
+.import-status {
+    color: #a9c7ff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
 .setting input[type="range"] {
     width: 100%;
     height: 8px;
@@ -341,6 +348,10 @@ body.light-mode .setting input[type="text"] {
     background: #f9f9f9;
     color: #333;
     border-color: #ddd;
+}
+
+body.light-mode .import-status {
+    color: #3559a8;
 }
 
 @media (max-width: 768px) {
